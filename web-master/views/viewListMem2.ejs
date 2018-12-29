@@ -1,0 +1,121 @@
+<%var products%>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%=title%></title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script  src="https://code.jquery.com/jquery-3.3.1.min.js"  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+ 		 crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/admin.css">
+	<script type="text/javascript">
+		if(typeof(Storage) !== "undefined"){
+			if(localStorage.username){
+				if(localStorage.isadmin == 0){
+					window.location = "/"
+				}
+			}
+		}
+
+		function ClickListGroup(index){
+			$(".list-group-item").removeClass("active");
+			var url = ".list-group-item:eq(" + index + ")";
+			alert(index);
+			alert(url);
+			$(url).addClass("active");
+		}
+	</script>
+	
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			
+		</div>
+
+		<div class="col-md-3">
+			<div class="list-group">
+				<% 
+					if(products != undefined){
+				%>
+					<a href="/admin" class="list-group-item">Dashboard</a>
+					<a href="/editproducts" class="list-group-item active">Danh sách sản phẩm</a>
+					<a href="/viewListMem" class="list-group-item">Danh sách người dùng</a>
+					<a href="/viewListCart" class="list-group-item">Danh sách giỏ hàng</a>
+				<%
+				}
+				else{
+				%>
+					<a href="/admin" class="list-group-item">Dashboard</a>
+					<a href="/editproducts" class="list-group-item">Danh sách sản phẩm</a>
+					<%if(view == "1"){ %>
+						<a href="/viewListMem" class="list-group-item active">Danh sách người dùng</a>
+						<a href="/viewListCart" class="list-group-item">Danh sách giỏ hàng</a>
+					<%}
+					else{
+					%>
+						<a href="/viewListMem" class="list-group-item ">Danh sách người dùng</a>
+						<a href="/viewListCart" class="list-group-item active">Danh sách giỏ hàng</a>
+					<%}%>
+				<%}%>
+			</div>
+		</div>
+		
+		<div class="col-md-9">
+		<% 
+			if(buyers != undefined){
+				var data = buyers
+				%>
+				<h2 style="float: left;">Danh sách Người mua</h2>
+				<%
+				if(data){
+					var i = 0
+					for (i ; i < data.length; i++) {
+						if (i < 12){%>
+						<div>
+							<div id ="userActive" class="product well">
+								<div class="productInfo">
+									<h4 class="productName" style="color: #424242"><%- data[i].USERNAME%></h4>
+									<h4 class="productPrice" style="color: #3b68b5"><%- data[i].EMAIL%></h4>
+									<p class="productMoreInfo"><%- data[i].DIACHI%></p>
+								</div>
+								<%if(view == "2"){%>
+									<a href="/viewDonHang?key=<%= data[i].USERNAME%>"><button class="btn btn-success actionButton">Xem danh sách sản phẩm</button></a>
+									<a href="/deleteUser?key=<%= data[i].USERNAME%>"><button class="btn btn-danger actionButton">Xoá</button></a>
+								<%}%>
+							</div>
+						</div>
+						<%}else {
+							break;
+						}
+					}			
+				}			
+				%>
+			<%}
+			else{%>
+				<h2>Welcome to admin dashboard</h2>
+			<%}
+		%>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		function checkAdmin(){
+			if(typeof(Storage) !== "undefined"){
+				if(localStorage.username){
+					if(localStorage.isadmin == 0){
+						window.location = "/"
+					}
+				}
+			}
+		}
+	</script>
+</body>
+</html>

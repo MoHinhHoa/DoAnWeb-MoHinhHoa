@@ -1,0 +1,98 @@
+<%var username%>
+<%var title%>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= title? title : ''%></title>
+	<meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+   <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+	<script>
+		function checkUser(){
+			if(typeof(Storage) !== "undefined"){
+				if(localStorage.username){
+					var cartlink = "/cart?userid=" + localStorage.userid
+					document.getElementById("UserName").innerHTML = localStorage.username;
+					document.getElementById("logout").style.display = "block"
+					document.getElementById("Cart").innerHTML = "Giỏ hàng"
+					document.getElementById("Cart").setAttribute("href", cartlink)
+					document.getElementById("logout").innerHTML = "Đăng xuất"
+					var userlink
+					if(localStorage.isadmin == 0){
+						userlink = "/profile?userid=" + localStorage.userid
+					}
+					else{
+						userlink = "/admin"
+					}
+					document.getElementById("UserName").setAttribute("href", userlink)
+				}
+				else {
+					document.getElementById("logout").style.display = "none"
+					document.getElementById("Cart").innerHTML = "Đăng ký"
+					document.getElementById("Cart").setAttribute("href", "/register")
+					document.getElementById("UserName").innerHTML = "Đăng nhập";
+					document.getElementById("UserName").setAttribute("href", "/login")
+				}
+			}
+			else{
+
+			}
+		}
+		function SearchDevice(){
+			var device = document.getElementById("inputDevice").value;
+			if(device !== ""){
+				var url = "/productSearch?Name=" + device;
+		        //Khoi tao doi tuong
+		        var xhttp = new XMLHttpRequest() || ActiveXObject();
+		        //Bat su kien thay doi trang thai cuar request
+		        xhttp.onreadystatechange = function() {
+		        		console.log(this);
+		                //Kiem tra neu nhu da gui request thanh cong
+		                if (this.readyState == 4 && this.status == 200) {            	
+		                    window.location = this.responseURL;
+		                }
+		            }
+		            //cau hinh request
+		        xhttp.open('GET',url, true);
+		        //cau hinh header cho request
+		        xhttp.setRequestHeader('Content-Type', 'application/json');
+		        //gui request
+		        xhttp.send();
+	        }
+		}
+
+		function Hide(){
+			document.getElementById("sidebar").classList.toggle('active');
+		}
+	</script>
+</head>
+<body onload="checkUser()">
+<div class="wrapper">
+    <nav id="sidebar">
+        <div id="leftmenuinner" style="padding-top: 0px">
+            <div id ="leftmenuinnerinner">
+                <div class="sidebar-header">
+                    <div id="header">
+						<a href="/" id='headerA'>
+							<img src="images/logo_1.png" id="logo" alt="Logo">
+						</a>
+					</div>
+                </div> 
+                <div id="leftside">
+					<a href="/screen" class="MenuItem">Màn hình</a>
+					<a href="/cpu" class="MenuItem">CPU</a>
+					<a href="/mouse" class="MenuItem">Chuột</a>
+					<a href="/keyboard" class="MenuItem">Bàn phím</a>	
+				</div>
+            </div>
+        </div>
+    </nav>

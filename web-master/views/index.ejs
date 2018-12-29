@@ -1,0 +1,74 @@
+<% include header%>
+	<div id="content">
+	    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+	        <div class="container-fluid">
+	        	<div class="row">
+	    			<div class="col-sm-1">
+			            <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="Hide()"">
+			                <span>Menu</span>
+			            </button>
+			        </div>
+			        <div class="col-sm-5">
+				        <div class="flex-container">
+					        <input type="text" class="search-input" id="inputDevice" placeholder="Nhập tên sản phẩm, mã sản phẩm, từ khóa cần tìm...." value="" style="border-bottom-left-radius: 3px;">
+
+						   	<button type="button" id="sidebarCollapse" class="btn btn-info" onclick ="SearchDevice()">
+	                        	<p id= "icon" class="fas fa-search"></p>
+	                    	</button>
+	                    </div>
+					 </div>   
+			        <div class="col-sm-4" id ="Login">
+			            <a href="" class="headerElement" id="UserName">Đăng nhập</a>
+			        	<a href="" class="headerElement" id="Cart">Đăng kí</a>
+			        </div>
+			        <div class="col-sm-2" id ="Logout">
+			        	<a href="/" class="headerElement" id="logout" onclick="logout()"></a>
+			        </div>
+			    </div>
+	        </div>
+	    </nav>
+	   
+		<div id="rightside">
+			<img src="images/panel.png" id="panel" alt="Sự Kiện">
+		<% 
+			var data = products
+			if(data){
+				var i = 0
+				for (startId, i; startId < data.length; startId++, i++) {
+					if (i < 12){%>
+					<div class="product">
+						<a href="productview?key=<%= data[startId].MASP%>" class="productLink">
+							<img src="<%= data[startId].HINHANHSP%>" class="productImg" alt="productImg">
+							<div class="productMeta">
+								<div class="productTitle"><%= data[startId].TENSP%></div>
+								<div class="productPrice"><%= data[startId].GIASP%></div>
+							</div>
+						</a>
+					</div>
+					<%}else {
+						break;
+					}
+				}			
+			}
+		%>
+		</div>
+		<%if(data.length > startId){%>
+			<a href="/?startId=<%= startId%>"><button class="btn-lg btn-success morebutton">Xem thêm</button></a>
+		<%}%>
+		<%if(data.length <= startId){%>
+			<a href="/"><button class="btn-lg btn-success morebutton">Quay lại</button></a>
+		<%}%>
+		<img src="images/panel_2.png" id="panel" alt="Sự Kiện">
+		<% include footer%>
+	</div>
+</div>
+
+<script>
+	document.getElementById("inputDevice")
+			    .addEventListener("keyup", function(event) {
+			    event.preventDefault();
+			    if (event.keyCode === 13) {
+			        SearchDevice();
+			    }
+			});
+</script>

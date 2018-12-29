@@ -1,0 +1,116 @@
+<%include header%>
+<%var total = 0%>
+
+<div id="content">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+        	<div class="row">
+    			<div class="col-sm-1">
+		            <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="Hide()"">
+		                <span>Menu</span>
+		            </button>
+		        </div>
+		        <div class="col-sm-5">
+			        <div class="flex-container">
+				        <input type="text" class="search-input" id="inputDevice" placeholder="Nhập tên sản phẩm, mã sản phẩm, từ khóa cần tìm...." value="" style="border-bottom-left-radius: 3px;">
+
+					   	<button type="button" id="sidebarCollapse" class="btn btn-info" onclick ="SearchDevice()">
+                        	<p id= "icon" class="fas fa-search"></p>
+                    	</button>
+                    </div>
+				 </div>   
+		        <div class="col-sm-4" id ="Login">
+		            <a href="" class="headerElement" id="UserName">Đăng nhập</a>
+		        	<a href="" class="headerElement" id="Cart">Đăng kí</a>
+		        </div>
+		        <div class="col-sm-2" id ="Logout">
+		        	<a href="/" class="headerElement" id="logout" onclick="logout()"></a>
+		        </div>
+		    </div>
+        </div>
+    </nav>
+	<div id="rightside" style="text-align: left;">
+		<div class = "row">
+			<div class="col-md-8">
+				<h2>Giỏ hàng của bạn</h2>
+			</div>
+			<div class="col-md-2"><h3>Số lượng</h3></div>
+			<div class="col-md-2"><h3>Thành tiền</h3></div>
+			<div class="col-md-12">
+			<%
+				if (data.length > 0) {
+					for(var i =0; i < data.length; i++){
+						if(data[i].MASP !== productid){
+					%>
+							<div class="well" style="clear: both;    overflow: auto;">
+									<img class="col-md-2" src="<%- data[i].HINHANHSP%>">
+									<div class="col-md-6">
+										<h4 style="color: #424242"><%- data[i].TENSP%></h4>
+										<h4 style="color: #3b68b5"><%- data[i].GIASP%></h4>
+										<a href="/cart?userid=<%=userid%>&productid=<%=data[i].MASP%>"><button class="btn btn-danger actionButton">Xoá</button></a>
+									</div>
+									<h4 class="col-md-2" style="padding-left: 60px;"><%= data[i].SOLUONG%></h4>
+									<h4 class="col-md-2" id="<%- i%>" style="text-align: right; color: #3b68b5"></h4>
+									<%total = total + data[i].SOTIEN%>
+							</div>
+					<%
+						}
+					}
+
+				}
+			%>
+			</div>
+			<div class="col-md-12">
+				<hr>
+				<h3 class="col-md-6">Tổng cộng</h3>
+				<h3 class="col-md-6" id="total" style="text-align: right; padding-right: 30px; color: #3b68b5"></h3>
+			</div>
+			<button class="btn-lg btn-success" style="float: right; margin-right: 50px;">Thanh toán</button>
+		</div>
+		<div id="relateProduct">
+			<p id ="inforproduct">CÁC SẢN PHẨM KHÁC</p>
+			<% 
+				var data = products
+				if(data){
+					var i = 0
+					for (i; i < data.length; i++) {
+						if (i < 12){%>
+						<div class="product">
+							<a href="productview?key=<%= data[i].MASP%>" class="productLink">
+								<img src="<%= data[i].HINHANHSP%>" class="productImg" alt="productImg">
+								<div class="productMeta">
+									<div class="productTitle"><%= data[i].TENSP%></div>
+									<div class="productPrice"><%= data[i].GIASP%></div>
+								</div>
+							</a>
+						</div>
+						<%}else {
+							break;
+						}
+					}			
+				}
+			%>
+		</div>
+	</div>
+	<script type="text/javascript">
+		document.getElementById("total").innerHTML = PriceToString(<%= total%>)
+		<%for(var i=0; i<data.length; i++){%>
+			document.getElementById("<%- i%>").innerHTML = PriceToString(<%= data[i].SOTIEN%>)
+		<%}%>
+		function PriceToString (price) {
+			var s = price.toString()
+			var i = s.length
+			while (s.charAt(i-3)) {
+				if (i-3 <= 0) {break;}
+				var temp1 = s.slice(0, i-3)
+				var temp2 = s.slice(i-3)
+				s = temp1.concat(".", temp2)
+				i = i-3
+			}
+			s = s.concat(" ₫")
+			return s;
+		}
+	</script>
+
+	<%include footer%>
+</div>

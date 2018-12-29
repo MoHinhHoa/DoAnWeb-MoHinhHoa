@@ -1,0 +1,108 @@
+<% include header%>
+<%var message%>
+<div id="content"> 
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	        <div class="container-fluid">
+	        	<div class="row">
+	    			<div class="col-sm-1">
+			            <button type="button" id="sidebarCollapse" class="btn btn-info" onclick="Hide()"">
+			                <span>Menu</span>
+			            </button>
+			        </div>
+			        <div class="col-sm-5">
+				        <div class="flex-container">
+					        <input type="text" class="search-input" id="inputDevice" placeholder="Nhập tên sản phẩm, mã sản phẩm, từ khóa cần tìm...." value="" style="border-bottom-left-radius: 3px;">
+						   	<button type="button" id="sidebarCollapse" class="btn btn-info" onclick ="SearchDevice()">
+	                        	<p id= "icon" class="fas fa-search"></p>
+	                    	</button>
+	                    </div>
+					 </div>   
+			        <div class="col-sm-4" id ="Login">
+			            <a href="" class="headerElement" id="UserName">Đăng nhập</a>
+			        	<a href="" class="headerElement" id="Cart">Đăng kí</a>
+			        </div>
+			        <div class="col-sm-2" id ="Logout">
+			        	<a href="/" class="headerElement" id="logout" onclick="logout()"></a>
+			        </div>
+			    </div>
+	        </div>
+	    </nav>
+
+	<div id="rightside">
+		<p id ="inforproduct">THÔNG TIN SẢN PHẨM </p>
+		<div class ="row">
+		<% if(product != -1){%>
+			<img id="productImg" src="<%= product.HINHANHSP%>" alt="product image">
+			<div id="productBasicInfo">
+				<p id="productName"><%= product.TENSP%></p>
+				<div id="Info">
+					<div class="col-md-8">
+						<p id="productPrice"><%= product.GIASP%></p>
+						<br>
+						<p id="productInfo"><%- product.MOTASP%></p>
+					</div>
+					<div class="col-md-4">
+						<input type="button" id="getButton" class="btn btn-success" name="getButton" value="MUA NGAY" onclick="buyProduct()">
+						<div id="buyform">
+							<form id="form" method="POST" action="/addtocart?productid=<%= product.MASP%>">
+								<div class="form-group">
+									<label for="soluong">Số lượng</label>
+									<input type="hidden" id="userid" name="userid" value="">
+									<input type="number" class="form-control" name="soluong" min="1" value="1">
+								</div>
+								<input type="submit" class="btn btn-success" name="" value="Thêm vào giỏ">
+							</form>
+							<br>
+						</div>
+					</div>
+				</div>
+			</div>
+		<%}else{%>
+			<p id ="inforproduct_1">Sán Phẩm Bạn Tìm Không Tồn Tại</p>
+		<%}%>
+
+		</div>
+		<div id="relateProduct">
+			<p id ="inforproduct">CÁC SẢN PHẨM KHÁC</p>
+			<% 
+				var data = products
+				if(data){
+					var i = 0
+					for (startId, i; startId < data.length; startId++, i++) {
+						if (i < 12){%>
+						<div class="product">
+							<a href="productview?key=<%= data[startId].MASP%>" class="productLink">
+								<img src="<%= data[startId].HINHANHSP%>" class="productImg" alt="productImg">
+								<div class="productMeta">
+									<div class="productTitle"><%= data[startId].TENSP%></div>
+									<div class="productPrice"><%= data[startId].GIASP%></div>
+								</div>
+							</a>
+						</div>
+						<%}else {
+							break;
+						}
+					}			
+				}
+			%>
+		</div>
+	</div>
+	<script type="text/javascript">
+		document.getElementById('buyform').style.display = "none";
+		//var cartlink = "/cart?userid=" + localStorage.userid;
+		document.getElementById("userid").setAttribute("value", localStorage.userid)
+		//document.getElementById("tocart").setAttribute("href", "/cart?userid="+ localStorage.userid)
+		function buyProduct () {
+		    var x = document.getElementById('buyform');
+		    if (x.style.display === 'none') {
+		        x.style.display = 'block';
+		    } else {
+		        x.style.display = 'none';
+		    }
+		}
+
+	</script>
+	<div id ="footerProductView">
+		<% include footer%>
+	</div>
+</div>
